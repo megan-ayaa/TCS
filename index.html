@@ -505,34 +505,155 @@
         <div class="mt-12 grid md:grid-cols-2 gap-10 items-stretch"> 
 
         <div id="subscribe" class="flex flex-col h-full">
-            <div class="professional-card text-center p-6 border-l-4 border-[var(--accent-teal)] flex-grow">
-            <h3 class="text-2xl font-extrabold mb-4 text-[var(--primary-navy)]">Stay Connected</h3>
-            <p class="mb-6 text-lg font-light">Get exclusive updates on our latest program achievements, events, and impact stories delivered to your inbox.</p>
+            class="professional-card text-center p-6 border-l-4 border-[var(--accent-teal)] flex-grow">
+            <!-- ============================================ -->
+<!-- START OF NEW FORM (WITH NAME FIELD)          -->
+<!-- ============================================ -->
 
-            <form class="space-y-3">
-                <input type="text"
-                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[var(--primary-navy)] focus:border-transparent transition"
-                    placeholder="Your Full Name" required> 
-                    
-                <input type="email"
-                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[var(--primary-navy)] focus:border-transparent transition"
-                    placeholder="Your Email Address" required>
+<style>
+  /* Professional TSCA Theme Styles */
+  .tsca-box { 
+      padding: 25px; 
+      background: #ffffff; 
+      border-radius: 8px; 
+      border: 1px solid #e5e7eb; 
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      margin-top: 20px; 
+      max-width: 500px; /* Keeps it neat on desktop */
+      margin-left: auto;
+      margin-right: auto;
+  }
+  .tsca-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+      text-align: left;
+  }
+  .tsca-input, .tsca-select { 
+      width: 100%; 
+      padding: 12px; 
+      margin-bottom: 15px; 
+      border: 1px solid #d1d5db; 
+      border-radius: 6px; 
+      font-size: 15px;
+      box-sizing: border-box; /* Critical for padding */
+      background-color: #f9fafb;
+  }
+  .tsca-input:focus, .tsca-select:focus {
+      border-color: #c41e3a;
+      outline: none;
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+  }
+  .tsca-btn { 
+      width: 100%; 
+      padding: 14px; 
+      background-color: #c41e3a; /* TSCA Red */
+      color: white; 
+      border: none; 
+      font-weight: bold; 
+      cursor: pointer; 
+      text-transform: uppercase; 
+      border-radius: 6px; 
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+  }
+  .tsca-btn:hover { background-color: #a01830; }
+  .tsca-btn:disabled { background-color: #e57373; cursor: not-allowed; }
+</style>
 
-                <select
-                    class="w-full p-3 border rounded-lg bg-white focus:ring-2 focus:ring-[var(--primary-navy)] focus:border-transparent transition"
-                    required>
-                    <option value="" disabled selected>Select Subscription Type...</option>
-                    <option value="monthly">Monthly Newsletter</option>
-                    <option value="quarterly">Quarterly Impact Report</option>
-                    <option value="urgent">Urgent Program Alerts</option>
-                </select>
+<div class="tsca-box" id="subscribe-block">
+    <h3 style="text-align:center; color:#1f2937; margin-top:0; margin-bottom: 8px;">Stay Connected</h3>
+    <p style="text-align:center; font-size:14px; color:#6b7280; margin-bottom:20px; line-height: 1.5;">
+        Join our community to receive updates on our impact.
+    </p>
 
-                <button type="submit" class="action-btn w-full mt-4">
-                    SUBSCRIBE TO UPDATES
-                </button>
-            </form>
-            </div>
-        </div>
+    <form id="tsca-form" onsubmit="connectToGoogle(event)">
+        
+        <!-- 1. NEW: Name Field (Saves to 'Name' column) -->
+        <label class="tsca-label">Full Name</label>
+        <input type="text" name="name" class="tsca-input" placeholder="e.g. John Okello" required>
+
+        <!-- 2. Subscription Type (Saves to 'Message' column) -->
+        <label class="tsca-label">Subscription Type</label>
+        <select name="message" class="tsca-select" required>
+            <option value="" disabled selected>Select an option...</option>
+            <option value="Monthly Newsletter">Monthly Newsletter</option>
+            <option value="Quarterly Impact Report">Quarterly Impact Report</option>
+            <option value="Urgent Program Alerts">Urgent Program Alerts</option>
+        </select>
+
+        <!-- 3. Email (Saves to 'Email' column) -->
+        <label class="tsca-label">Email Address</label>
+        <input type="email" name="email" class="tsca-input" placeholder="name@example.com" required>
+
+        <!-- Hidden Phone (Required by backend order) -->
+        <input type="hidden" name="phone" value="">
+
+        <!-- 4. Subscribe Button -->
+        <button type="submit" id="sub-btn" class="tsca-btn">
+            Subscribe Now
+        </button>
+        
+        <!-- Status Message -->
+        <p id="status-msg" style="display:none; text-align:center; margin-top:15px; font-size: 14px;"></p>
+    </form>
+</div>
+
+<script>
+    // ▼▼▼▼ PASTE YOUR GOOGLE SCRIPT URL BELOW ▼▼▼▼
+    const SCRIPT_URL =https://script.google.com/macros/s/AKfycbz46vKG97OgX-nIjLtYsfTtzAZN4d7EgWu2Eb4A6j-2uKa6QJPzX7OoqNeAiXTOBV9_8w/exec
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+    function connectToGoogle(e) {
+        e.preventDefault();
+        const btn = document.getElementById('sub-btn');
+        const msg = document.getElementById('status-msg');
+        const form = document.getElementById('tsca-form');
+
+        // Check if URL is pasted
+        if(SCRIPT_URL.includes('PASTE')) {
+            alert("⚠️ Please paste your Google Script URL in the code.");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = 'Processing...';
+        msg.style.display = 'none';
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            mode: 'no-cors'
+        })
+        .then(() => {
+            msg.innerHTML = "✅ <b>Welcome!</b> You have successfully subscribed.";
+            msg.style.color = "#16a34a"; // Green
+            msg.style.display = "block";
+            form.reset();
+        })
+        .catch(err => {
+            msg.innerText = "❌ Error connecting. Please try again.";
+            msg.style.color = "#dc2626"; // Red
+            msg.style.display = "block";
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = 'SUBSCRIBE NOW';
+        });
+    }
+</script>
+
+<!-- ============================================ -->
+<!-- END OF NEW FORM                              -->
+<!-- ============================================ -->
+
 
         <div id="donate-info" class="flex flex-col h-full">
             <div class="professional-card text-center p-6 border-l-4 border-[var(--primary-navy)] flex-grow flex flex-col justify-between">
@@ -612,4 +733,5 @@
       });
   </script>
 </body>
+
 </html>
